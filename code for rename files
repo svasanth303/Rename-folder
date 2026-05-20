@@ -14,3 +14,15 @@ Get-ChildItem -Path $folderPath -File | ForEach-Object {
 Get-ChildItem * | Rename-Item -NewName {
     $_.Name -replace '^(\d+[\s_-]*)+', '' -replace '^[\s_-]+', ''
 }
+
+-----------------------CONVERT AUDIO FILE IN TO M4A-----------------------------------------------------------------------------
+
+$folderPath = "C:\appa songs"
+
+Get-ChildItem -Path $folderPath -File | ForEach-Object {
+
+    $inputFile = $_.FullName
+    $outputFile = Join-Path $folderPath ($_.BaseName + ".m4a")
+
+    ffmpeg -i "$inputFile" -vn -c:a aac -b:a 192k "$outputFile"
+}
