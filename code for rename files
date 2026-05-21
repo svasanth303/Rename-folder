@@ -1,20 +1,17 @@
-$folderPath = "C:\YourFolderPath"
+$folderPath = "C:\appa songs"
 
 $count = 1
 
-Get-ChildItem -Path $folderPath -File | ForEach-Object {
+Get-ChildItem -Path $folderPath -File | Sort-Object Name | ForEach-Object {
 
-    $newName = "$count" + "_" + $_.Name
+    $cleanName = $_.Name -replace '^\d+_', ''
 
-    Rename-Item -Path $_.FullName -NewName $newName
+    $newName = "$count" + "_" + $cleanName
+
+    Rename-Item -Path $_.FullName -NewName $newName -Force
 
     $count++
 }
-
-Get-ChildItem * | Rename-Item -NewName {
-    $_.Name -replace '^(\d+[\s_-]*)+', '' -replace '^[\s_-]+', ''
-}
-
 -----------------------CONVERT AUDIO FILE IN TO M4A-----------------------------------------------------------------------------
 
 $folderPath = "C:\Users\DELL\Downloads"
