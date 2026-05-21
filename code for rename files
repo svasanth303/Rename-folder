@@ -17,12 +17,38 @@ Get-ChildItem * | Rename-Item -NewName {
 
 -----------------------CONVERT AUDIO FILE IN TO M4A-----------------------------------------------------------------------------
 
-$folderPath = "C:\appa songs"
+$folderPath = "C:\Users\DELL\Downloads"
 
 Get-ChildItem -Path $folderPath -File | ForEach-Object {
 
     $inputFile = $_.FullName
     $outputFile = Join-Path $folderPath ($_.BaseName + ".m4a")
 
-    ffmpeg -i "$inputFile" -vn -c:a aac -b:a 192k "$outputFile"
+    ffmpeg -y -i "$inputFile" -vn -c:a aac -b:a 192k "$outputFile"
+}
+------------------------------------------CONVERT AUDIO FILE IN TO M4A-------------------------------------
+$folderPath = "C:\Users\DELL\Downloads"
+
+Get-ChildItem -Path $folderPath -File | ForEach-Object {
+
+    $inputFile = $_.FullName
+    $outputFile = Join-Path $folderPath ($_.BaseName + ".mp3")
+
+    ffmpeg -y -i "$inputFile" -vn -codec:a libmp3lame -qscale:a 2 "$outputFile"
+}
+---------------------------------------skip existing mp3audio file------------------------------------------------
+✅ Skip Existing MP3 Files
+
+Use this safer version:
+
+$folderPath = "C:\Users\DELL\Downloads"
+
+Get-ChildItem -Path $folderPath -File | Where-Object {
+    $_.Extension -ne ".mp3"
+} | ForEach-Object {
+
+    $inputFile = $_.FullName
+    $outputFile = Join-Path $folderPath ($_.BaseName + ".mp3")
+
+    ffmpeg -y -i "$inputFile" -vn -codec:a libmp3lame -qscale:a 2 "$outputFile"
 }
